@@ -1,0 +1,79 @@
+
+// these variables can be used to create
+// an image with expected properties
+panelWidth=283.3663782146333;
+panelHeight=267.3456642519685;
+panelID='rect4187';
+panelIndex=0
+// set cwd so that loading images will work if figure folder is moved.
+File.setDefaultDir('/Users/jmutterer/Documents/demoSmartFigure/figure1/data');
+
+
+newImage("Untitled", "8-bit white", 566, 534, 1);
+run("Macro...", "code=v=255-255*(random()<0.0003)");
+run("Voronoi");
+run("Gaussian Blur...","sigma=1");
+run("Fire");
+getStatistics(area, mean, min, max, std, histogram);
+setMinAndMax(0, max);
+whitebg();
+changeValues(0xffffff,0xffffff,0xdddddd);
+
+
+
+// save result image at expected location
+saveAs('PNG', '/Users/jmutterer/Documents/demoSmartFigure/figure1/images/rect4187.png');
+// output useful image properties for later
+Stack.getDimensions(w, h, c, s, f);
+getVoxelSize(p, ph, pd, u);
+List.clear();
+List.set("width", w);
+List.set("height", h);
+List.set("pixelsize", p);
+List.set("unit", u);
+print("");
+print(List.getList());
+
+// helper functions
+
+function openBF(filepath,series) {
+run('Bio-Formats Importer', 'open=['+filepath+'] autoscale color_mode=Composite rois_import=[ROI manager] view=Hyperstack stack_order=XYCZT series_'+series);
+}
+
+function channels(s) {
+// inspired by Kevin Terretaz 
+oll="RGBCYMKVFS";
+luts=newArray("Red","Green","Blue","Cyan","Yellow","Magenta","Grays","Viridis","Fire","Spectrum");
+if (bitDepth() ==24) run("Make Composite");
+Stack.getDimensions(width, height, chs, slices, frames);
+for (i=1;i<=chs;i++) {
+if(is("composite")) Stack.setChannel(i);
+c = s.substring(i-1,i);
+l = oll.indexOf(toUpperCase(c));
+if (l>-1) run(luts[l]);
+}
+activechannels = replace(s,"[^0]",1);
+if(is("composite")) {
+Stack.setDisplayMode("composite");
+Stack.setActiveChannels(activechannels);
+last = activechannels.lastIndexOf("1");
+if (last>-1) Stack.setChannel(last+1);
+}
+}
+
+function mark(color,width) {
+run("Properties... ", "  stroke="+color+" width="+width);
+run("Add Selection...");
+}
+
+
+function whitebg() {
+setSlice(1);
+setMetadata("Label", "");
+run("RGB Color");
+run("Invert");
+run("HSB Stack");
+run("Macro...", "code=v=(v+128)%256 slice");
+run("RGB Color");
+}
+
