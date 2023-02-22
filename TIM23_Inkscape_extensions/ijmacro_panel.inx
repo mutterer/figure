@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <name>ImageJ Macro Panel</name>
+  <id>org.cnrs.mutterer.figure.imagej_panel</id>
+
+  <param name="tab" type="notebook">
+    <page name="Options" gui-text="Options">
+      <param name="data_path" type="string" gui-text="Path to source data">./data/</param>
+      <param name="images_path" type="string" gui-text="Path to save panel images">./images/</param>
+      <param name="macros_path" type="string" gui-text="Path to save panel scripts">./scripts/</param>
+      <param name="embed" type="bool" gui-text="Embed images instead.">true</param>
+      <param name="scalebar" type="bool" gui-text="Add scale bar">true</param>
+    </page>
+    <page name="Setup" gui-text="Setup">
+      <param name="java" type="string" gui-text="Java Program">java</param>
+      <param name="jcmd" type="string" gui-text="Java Options">-Xmx4096m</param>
+      <param name="imagej" type="string" gui-text="ImageJ Program (ij.jar)">./ImageJ/ij.jar</param>
+      <param name="icmd" type="string" gui-text="ImageJ Command">-batch $MACRO</param>
+    </page>
+    <page name="Help" gui-text="Help">
+      <label>Replaces the current object by image result from macro code in object's description.</label>
+      <separator />
+      <label>See this link about ImageJ command line options:</label>
+      <label appearance="url">https://imagej.nih.gov/ij/docs/install/linux.html#options </label>
+    </page>
+  </param>
+  
+  <effect needs-live-preview="false">
+    <object-type>all</object-type>
+    <effects-menu>
+      <submenu name="Figure"/>
+    </effects-menu>
+  </effect>
+  <script>
+    <command location="inx" interpreter="python">ijmacro_panel.py</command>
+  </script>
+</inkscape-extension>

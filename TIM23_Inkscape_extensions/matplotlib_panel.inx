@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <name>Matplotlib Panel</name>
+  <id>org.cnrs.mutterer.matplotlib_panel</id>
+
+  <param name="tab" type="notebook">
+    <page name="Options" gui-text="Options">
+      <label>Output folders</label>
+      <param name="images_path" type="string" gui-text="Path to save panel images">./images/</param>
+      <param name="scripts_path" type="string" gui-text="Path to save panel scripts">./scripts/</param>
+      <separator />
+      <param name="embed" type="bool" gui-text="Embed images instead.">true</param>
+    </page>
+
+    <page name="Setup" gui-text="Setup">
+      <param name="rcmd" type="string" gui-text="pymol Cmd">/usr/bin/python</param>
+      <param name="cmdopt" type="string" gui-text="pymol Cmd Options">$MACRO</param>
+      <param name="quality" type="float" min="1" max="5" gui-text="Image resolution multiplier">2</param>
+      <separator />
+    </page>
+    <page name="Help" gui-text="Help">
+      <label>Invokes python on matplotlib code taken from object's description</label>
+    </page>
+  </param>
+  
+  <effect needs-live-preview="false">
+    <object-type>all</object-type>
+    <effects-menu>
+      <submenu name="Figure"/>
+    </effects-menu>
+  </effect>
+  <script>
+    <command location="inx" interpreter="python">matplotlib_panel.py</command>
+  </script>
+</inkscape-extension>
